@@ -15,12 +15,13 @@
 
   
   var detectNetwork = function(cardNumber) {
-    var network = checkLength(cardNumber);
-    if (network === undefined) {
-      network = checkPrefix(cardNumber)
-      return network;
+    var bankByLength = checkLength(cardNumber);
+    var bankByPrefix = checkPrefix(cardNumber);
+
+    if (bankByLength === bankByPrefix) {
+      return bankByPrefix; 
     } else {
-      return network;
+      return 'Unknown Bank';
     }
   };
 
@@ -33,7 +34,7 @@
         return 'American Express';
         break;
       default:
-        return undefined;
+        return 'Unknown Bank';
         break;
     }
 
@@ -43,18 +44,17 @@
     var prefix = cardNumber.slice(0, 2);
     switch (prefix) {
       case '38':
+      case '39':
         return 'Diner\'s Club';
         break;
       case '34':
+      case '37':
         return 'American Express';
         break;
       default:
         return 'Unknown Bank';
-        break;
     }
     
   }
   
-// var test = detectNetwork('445602354');
-// console.log(test);
   
