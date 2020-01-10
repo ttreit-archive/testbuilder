@@ -29,7 +29,7 @@
         return validateLength(cardNumber, masterCard);
       case 'Visa':          
         return validateLength(cardNumber, visa);
-            default:
+      default:
         return false 
     }
 
