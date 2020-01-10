@@ -1,60 +1,67 @@
-
-
-// Given a credit card number, this function should return a string with the 
-// name of a network, like 'MasterCard' or 'American Express'
-// Example: detectNetwork('343456789012345') should return 'American Express'
-
-// How can you tell one card network from another? Easy! 
-// There are two indicators:
-//   1. The first few numbers (called the prefix)
-//   2. The number of digits in the number (called the length)
-
-  // Note: `cardNumber` will always be a string
-  // The Diner's Club network always starts with a 38 or 39 and is 14 digits long
-  // The American Express network always starts with a 34 or 37 and is 15 digits long
-
-  
   var detectNetwork = function(cardNumber) {
-    var bankByLength = checkLength(cardNumber);
-    var bankByPrefix = checkPrefix(cardNumber);
+    //get bank name by unique prefix. Prefixes are unique so this
+    //is the best way to get the initial bank.  
+    var bank = checkPrefix(cardNumber);  
+    
+    //verify card is valid length - if both prefix and length are within
+    //the bank's constraints we can proceed.
+    var bankValidated = checkLength(bank, cardNumber);
 
-    if (bankByLength === bankByPrefix) {
-      return bankByPrefix; 
+    if (bankValidated) {
+      return bank;
     } else {
       return 'Unknown Bank';
     }
   };
 
-  function checkLength(cardNumber) {
-    switch (cardNumber.length) {
-      case 14:
-        return 'Diner\'s Club';
-        break;
-      case 15:
-        return 'American Express';
-        break;
-      default:
-        return 'Unknown Bank';
-        break;
+  function checkLength(bank, cardNumber) {
+    var dinersClub =[14];
+    var amex =[15];
+    var visa =[13, 16, 19];
+    var masterCard =[16];
+
+    switch (bank) {
+      case 'American Express':
+        return validateLength(cardNumber, amex);
+      case 'Diner\'s Club':
+        return validateLength(cardNumber, dinersClub);
+      case 'MasterCard':
+        return validateLength(cardNumber, masterCard);
+      case 'Visa':          
+        return validateLength(cardNumber, visa);
+            default:
+        return false 
     }
 
   }
+  function validateLength(cardNumber, bankArray) {
+    return (bankArray.includes(cardNumber.length));
+  }
+
 
   function checkPrefix(cardNumber) {
     var prefix = cardNumber.slice(0, 2);
     switch (prefix) {
+      case '34':
+      case '37':
+        return 'American Express';
+        break;
       case '38':
       case '39':
         return 'Diner\'s Club';
         break;
-      case '34':
-      case '37':
-        return 'American Express';
+      case '51':
+      case '52':
+      case '53':
+      case '54':
+      case '55':
+        return 'MasterCard';
+        break;
+      case '41':
+        return 'Visa'
         break;
       default:
         return 'Unknown Bank';
     }
     
   }
-  
-  
